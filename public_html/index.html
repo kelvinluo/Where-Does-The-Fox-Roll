@@ -21,6 +21,9 @@
 		     z-index:100;
 			 position:absolute;
 		    }
+	   body{
+	   		background-color: #000000;
+	   	   }
         </style>
         <script type="text/javascript">
             var newX, newY, intendedDirection; //global
@@ -29,15 +32,20 @@
                 $(".scott").animateSprite({
                     fps: 10,
 					animations: {
-					    statics:[0],
+					    front_statics:[30, 31, 32, 33, 34],
+						back_statics:[36, 37, 38, 39, 35],
+						right_side_statics:[40, 41, 42, 43, 44],
+						right_front_side_statics:[46, 47, 48, 49, 45],
+						left_side_statics:[50, 51, 52, 53, 54],
+						left_front_side_statics:[56, 57, 58, 59, 55],
+						front: [1, 2, 3, 4, 0],
         				back: [6, 7, 8, 9, 5],
-        		   		front: [1, 2, 3, 4, 0],
 						right_side: [11, 12, 13, 14, 10],
 						right_front_side: [16, 17, 18, 19, 15],
 						left_side: [21, 22, 23, 24, 20],
 						left_front_side: [26, 27, 28, 29, 25]
     			  	},
-                    loop: false
+                    loop: true
                 })
             });	
 			
@@ -187,69 +195,62 @@
 						
 						var fox_y = (x)*43 + (x + 1)*12;
 						
-						var difference = 55/2;
+						var x_dif = 55/2;
+						var y_dif = 55/2;
 						
 						if (direction == 1){
 						   //alert("Up")
-						   fox_y -= difference;
+						   y_dif = -y_dif;
+						   x_dif = 0;
 						   $(".scott").animateSprite('play', 'back')
-						   
-						   var myVar=setTimeout(function () {myTimer1()}, 200);
+						}
+						else if (direction == 2){
+						//Animation
+						   $(".scott").animateSprite('play', 'front')
+						   x_dif = 0;
+						}
+						else if (direction == 3){
+						     //alert("Left")
+						   $(".scott").animateSprite('play', 'left_side')
+						   x_dif = -x_dif;
+						   y_dif = 0;
+						}
+						else if (direction == 4){
+							 //alert("Right")
+							 $(".scott").animateSprite('play', 'right_side')
+							 y_dif = 0;
+						}
+						fox_y += y_dif;
+						fox_x += x_dif;
+						
+						var myVar=setTimeout(function () {myTimer1()}, 200);
 						   function myTimer1() {
+						   				  fox_y += y_dif;
+										  fox_x += x_dif;
 						                  document.getElementById("fox").style.top = fox_y + "px";
-										  fox_y -= difference;
+										  document.getElementById("fox").style.left = fox_x + "px";
 									 }
 						
 						   var myVar2=setTimeout(function () {myTimer2()}, 300);
 						   function myTimer2() {
 						                  document.getElementById("fox").style.top = fox_y + "px";
-							}
+										  document.getElementById("fox").style.left = fox_x + "px";
+										  switch (direction){
+										  case 1: 
+										  	   $(".scott").animateSprite('play', 'back_statics')
+											   break;
+										  case 2:
+										  	   $(".scott").animateSprite('play', 'front_statics')
+											   break;
+										  case 3:
+										  	   $(".scott").animateSprite('play', 'left_side_statics')
+											   break;
+										  case 4:
+										  	   $(".scott").animateSprite('play', 'right_side_statics')
+											   break;
+										  }
 						}
-						else if (direction == 2){
-						//Animation
-						   $(".scott").animateSprite('play', 'front')
-						   fox_y += difference;
-						   var myVar=setTimeout(function () {myTimer3()}, 200);
-						   function myTimer3() {
-						                  document.getElementById("fox").style.top = fox_y + "px";
-										  fox_y += difference;
-									 }
 						
-						   var myVar2=setTimeout(function () {myTimer4()}, 300);
-						   function myTimer4() {
-						                  document.getElementById("fox").style.top = fox_y + "px";
-							}
-						}
-						else if (direction == 3){
-						     //alert("Left")
-							 $(".scott").animateSprite('play', 'left_side')
-						   fox_x -= difference;
-						   var myVar=setTimeout(function () {myTimer5()}, 200);
-						   function myTimer5() {
-						                  document.getElementById("fox").style.left = fox_x + "px";
-										  fox_x -= difference;
-									 }
-						
-						   var myVar2=setTimeout(function () {myTimer6()}, 300);
-						   function myTimer6() {
-						                  document.getElementById("fox").style.left = fox_x + "px";
-							}
-						}
-						else if (direction == 4){
-							 //alert("Right")
-							 $(".scott").animateSprite('play', 'right_side')
-						   fox_x += difference;
-						   var myVar=setTimeout(function () {myTimer7()}, 200);
-						   function myTimer7() {
-						                  document.getElementById("fox").style.left = fox_x + "px";
-										  fox_x += difference;
-									 }
-						
-						   var myVar2=setTimeout(function () {myTimer8()}, 300);
-						   function myTimer8() {
-						                  document.getElementById("fox").style.left = fox_x + "px";
-							}
-						}
 			}
 			
 			function endFox (direction, x, y){
