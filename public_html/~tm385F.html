@@ -95,10 +95,10 @@
 				document.getElementById("fox").style.top = fox_y + "px";
 				//////////////////////////////
 				
-				
+				if (!endding){
                 $(".platform").click(function() {
-					if (!endding){
-					   $(this).addClass("blocked");
+                    $(this).addClass("blocked");
+					
 					   findPath(cat_x, cat_y, intendedDirection);
 					}
                     

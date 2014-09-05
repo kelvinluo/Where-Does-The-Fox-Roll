@@ -16,15 +16,15 @@
 				 z-index: 2;
   				 top:0px;
   				 left:0px;
- 				 width: 1000px;
- 				 height: 200px;
- 				 background: transparent url(images/fox_front.png) no-repeat;}
+ 				 width: 43px;
+ 				 height: 43px;
+ 				 background: transparent url(images/fox_front.png)  no-repeat;}
         </style>
         <script>
             var newX, newY, intendedDirection; //global
             $(document).ready(function() {
-				$('#fox_ani').sprite({fps: 8, no_of_frames: 5});
                 var arr = [];
+				
                 for (var x = 0; x < 12; x++) { // generate the map
                     arr[x] = [];
                     for (var y = 0; y < 12; y++) {
@@ -54,6 +54,28 @@
                         $("div#" + randX + "-" + randY).addClass("blocked");
                     }
                 }
+				//////////////////////////////
+				
+				//Initial position
+				var fox_pos = $("#fox_ani");
+				var screen_width = $(window).width();
+				
+				var fox_x = 0;
+				if (y <= 5){
+    					fox_x = screen_width/2 - (6 - cat_y)*43 - (5 - cat_y)*12 - 6;
+				}
+				else{
+						fox_x = screen_width/2 + (cat_y - 6)*43 + (cat_y - 6)*12 + 6;
+				}
+				var fox_y = (cat_x)*43 + (cat_x + 1)*12;
+				
+				fox_pos.css({left:fox_x + "px", top:fox_y + "px"});
+				fox_pos.sprite({fps: 10, no_of_frames: 5});
+				
+				
+				//////////////////////////////
+				
+				
                 $(".platform").click(function() {
                     $(this).addClass("blocked");
                     findPath(cat_x, cat_y, intendedDirection);
@@ -77,6 +99,9 @@
                         randSide == 1 ? pathFinding = [4, 3, 1, 2] : pathFinding = [4, 1, 3, 2];
                         break;
                 }
+				
+
+				/////////////////
 				
                 for (i = 0; i < 4; i++) {
                     if (window["direction".concat(pathFinding[i])](x, y)) {
@@ -111,40 +136,24 @@
 							 fox_x = screen_width/2 + (y - 6)*43 + (y - 6)*12 + 6;
 						}
 						
-						var new_foxX = 0;
-						if (newY <= 5){
-    						 new_foxX = screen_width/2 - (6 - newY)*43 - (5 - newY)*12 - 6;
-						}
-						else{
-							 new_foxX = screen_width/2 + (newY - 6)*43 + (newY - 6)*12 + 6;
-						}
-						
-						
 						var fox_y = (x)*43 + (x + 1)*12;
-						var new_foxY = (newX)*43 + (newX + 1)*12;
 						
-						//fox_pos.style.top = fox_y + "px";
-						//fox_pos.style.left = fox_x + "px";
-						
-						//var difference = 0;
-						//if (x > newX){
-						//difference = (fox_y - new_foxY)/3;
-						//fox_pos.animate({background:url(../fox_front_2.png), top:'300px'}, 200);
-						//fox_pos.animate({background:url(../fox_front_3.png), top:'300px'}, 200);
-						//fox_pos.animate({background:url(../fox_front_4.png), top:'300px'}, 200);
-						//fox_pos.animate({background:url(../fox_front_5.png), top:'300px'}, 200);
-						//fox_pos.animate({background:url(../fox_front_1.png), top:'300px'}, 200);
-						//}
-						//else if (x < newX){
-						//difference = (new_foxY - fox_y)/3;
-						//fox_pos.sprite({fps: 8, no_of_frames: 5});
-						//}
-						//else if (y > newY){
-						//difference = (fox_x - new_foxX)/3;
-						//}
-						//else if (y < newY){
-						//difference = (new_foxX - fox_x)/3;
-						//}
+						var difference = 55;
+						if (x > newX){
+						   alert("Up")
+						}
+						else if (x < newX){
+						//Animation
+						fox_y += difference;
+						fox_pos.spStart();
+						fox_pos.animate({top:fox_y + 'px'}, 100);
+						}
+						else if (y > newY){
+						     alert("Left")
+						}
+						else if (y < newY){
+							 alert("Right")
+						}
 				
             }
 
