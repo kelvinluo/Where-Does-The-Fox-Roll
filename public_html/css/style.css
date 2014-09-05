@@ -54,7 +54,7 @@ ol.odd {
 .platform, .platform_exit {
   z-index:1;
   position: relative;
-  background-color: #ccc;
+  background-color: #000000;
   height: 43px;
   width: 43px;
   margin: 6px;
@@ -63,6 +63,14 @@ ol.odd {
           transition: all 150ms ease-in-out;
   border-radius:5px;}
 
+.platform{
+          height: 41px;
+          width: 41px;
+          border-style: solid;
+          border-color: #ffffff;
+          border-width: 1px;
+ }
+  
 .platform_exit {
   background-color: black !important; }
 
