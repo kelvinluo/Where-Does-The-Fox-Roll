@@ -39,7 +39,7 @@ ol.odd {
 
 .hex:before {
   -webkit-transform: rotate(60deg);
-      -ms-transform: rotate(60deg);
+      -ms-tr#1F1F1Fansform: rotate(60deg);
           transform: rotate(60deg); }
 
 .hex:after {
@@ -67,7 +67,7 @@ ol.odd {
           height: 41px;
           width: 41px;
           border-style: solid;
-          border-color: #ffffff;
+          border-color: #1F1F1F;
           border-width: 1px;
  }
   
