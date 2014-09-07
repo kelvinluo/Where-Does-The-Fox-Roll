@@ -54,7 +54,7 @@ ol.odd {
 .platform, .platform_exit {
   z-index:1;
   position: relative;
-  background-color: #000000;
+  background-color: #FFFFFF;
   height: 43px;
   width: 43px;
   margin: 6px;
@@ -67,12 +67,12 @@ ol.odd {
           height: 41px;
           width: 41px;
           border-style: solid;
-          border-color: #1F1F1F;
+          border-color:#D9D9D9;
           border-width: 1px;
  }
   
 .platform_exit {
-  background-color: black !important; }
+  background-color: white !important; }
 
 .platform:hover, .blocked {
   background: #F58787; }
@@ -82,8 +82,8 @@ ol.odd {
   width: 660px;
   height: 660px;
   margin: auto;
-  background-color: #000000;}
+  background-color: #FFFFFF;}
 
 .active {
   z-index:2;
-  background-color: #000000 !important; }
+  background-color: #FFFFFF !important; }
