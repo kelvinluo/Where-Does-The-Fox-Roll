@@ -3,19 +3,20 @@
     <head>
         <title>MEOW~!</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewportx`" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.spritely.js"></script>
 		<script type="text/javascript" src="jquery.animateSprite.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <style type="text/css">
 		.scott {
+			   pointer-events:none;
 			   animation-timing-function:
 			   z-index:100;
 			   height: 43px;
 			   width: 43px;
 			   background-image: url(images/animation_total.png);
-			   display: inline-block;
+			   display: inline-block;2
 			   }
 		#fox{
 		     z-index:100;
@@ -29,9 +30,11 @@
         <script type="text/javascript">
             var newX, newY, intendedDirection; //global
 			var endding = false;
+			var win = false;
+			var currentX = 0, currentY = 0;
 			$(function() {
                 $(".scott").animateSprite({
-                    fps: 10,
+                    fps: 15,
 					animations: {
 					    front_statics:[30, 31, 32, 33, 34],
 						back_statics:[36, 37, 38, 39, 35],
@@ -53,7 +56,7 @@
 			
             $(document).ready(function() {
                 var arr = [];
-				
+				document.getElementsByTagName("body")[0].style.cursor = "url('images/mousePointer.cur'), auto";
                 for (var x = 0; x < 12; x++) { // generate the map
                     arr[x] = [];
                     for (var y = 0; y < 12; y++) {
@@ -66,7 +69,7 @@
                         arr[x][y].appendTo('div.container');
                     }
                 }
-//                    setTimeout(function() {
+//                    setTimeout(function() {				
 //                     $('<div class="platform"/>').appendTo('div.container');
 //                    }, 25*i);
                 cat_x = getRandInt(); // called only once on load
@@ -93,15 +96,17 @@
 				
 				var fox_x = 0;
 				if (y <= 5){
-    					fox_x = screen_width/2 - (6 - cat_y)*43 - (5 - cat_y)*12 - 6;
+    					fox_x = screen_width/2 - (6 - cat_y)*43 - (5 - cat_y)*4;
 				}
 				else{
-						fox_x = screen_width/2 + (cat_y - 6)*43 + (cat_y - 6)*12 + 6;
+						fox_x = screen_width/2 + (cat_y - 6)*43 + (cat_y - 6)*4;
 				}
-				var fox_y = (cat_x)*43 + (cat_x + 1)*12;
+				var fox_y = (cat_x)*33 + (cat_x + 1)*4 - 5;
 				
 				document.getElementById("fox").style.left = fox_x + "px";
 				document.getElementById("fox").style.top = fox_y + "px";
+				currentX = cat_x;
+				currentY = cat_y;
 				//////////////////////////////
 				
 				
@@ -112,11 +117,26 @@
 					}
                     
                 });
+				$(window).resize(function(){
 				
+				var fox_x = 0;
+				if (y <= 5){
+    					fox_x = screen_width/2 - (6 - currentY)*43 - (5 - currentY)*4;
+				}
+				else{
+						fox_x = screen_width/2 + (currentY - 6)*43 + (currentY - 6)*4;
+				}
+				var fox_y = (currentX)*33 + (currentX + 1)*4 - 5;
+				document.getElementById("fox").style.left = fox_x + "px";
+				document.getElementById("fox").style.top = fox_y + "px";
+				});
             });
+			
+			
+			
             function findPath(x, y, direction) { //NOTE: x is up/down. y is left/right. x-1 is up 1. y-1 is left 1      
                 var pathFinding;
-                var randSide = Math.floor((Math.random() * 2) + 1);
+                var randSide = Math.floor((Math.random() * 2) + 1);    
                 switch (direction) {
                     case 1:
                         randSide == 1 ? pathFinding = [1, 2, 4, 3] : pathFinding = [1, 4, 2, 3];
@@ -149,6 +169,7 @@
                     }
                     else if (i >= 3) { // last loop and break didn't trigger so all paths failed.
                         alert("YOU WON!!");
+						win = true;
                     }
                 }
 				
@@ -174,7 +195,7 @@
 				if (endding){
 				     endFox(moveDirection, x, y);
 				}
-				else{
+				else if (!win){
 					 moveFox(moveDirection, x, y);
 				}
             }
@@ -186,18 +207,17 @@
 					    var fox_pos = $('.fox');
 						var screen_width = $(window).width();
 						var screen_height = $(window).height();
-						var fox_x = 0;
-						if (y <= 5){
-    						 fox_x = screen_width/2 - (6 - y)*43 - (5 - y)*12 - 6;
-						}
-						else{
-							 fox_x = screen_width/2 + (y - 6)*43 + (y - 6)*12 + 6;
-						}
+				var fox_x = 0;
+				if (y <= 5){
+    					fox_x = screen_width/2 - (6 - y)*43 - (5 - y)*4;
+				}
+				else{
+						fox_x = screen_width/2 + (y - 6)*43 + (y - 6)*4;
+				}
+				var fox_y = (x)*33 + (x + 1)*4 - 5;
 						
-						var fox_y = (x)*43 + (x + 1)*12;
-						
-						var x_dif = 55/3;
-						var y_dif = 55/3;
+						var x_dif = 47/3;
+						var y_dif = 37/3;
 						
 						if (direction == 1){
 						   //alert("Up")
@@ -262,29 +282,31 @@
 											   break;
 										  }
 						}
-						
+						currentX = x;
+						currentY = y;
 			}
 			
 			function endFox (direction, x, y){
 					    var fox_pos = $('.fox');
 						var screen_width = $(window).width();
 						var screen_height = $(window).height();
-						var fox_x = 0;
-						if (y <= 5){
-    						 fox_x = screen_width/2 - (6 - y)*43 - (5 - y)*12 - 6;
-						}
-						else{
-							 fox_x = screen_width/2 + (y - 6)*43 + (y - 6)*12 + 6;
-						}
+				var fox_x = 0;
+				if (y <= 5){
+    					fox_x = screen_width/2 - (6 - y)*43 - (5 - y)*4;
+				}
+				else{
+						fox_x = screen_width/2 + (y - 6)*43 + (y - 6)*4;
+				}
+				var fox_y = (x)*33 + (x + 1)*4 - 10;
 						
-						var fox_y = (x)*43 + (x + 1)*12;
+						
 						
 						var end = false;
-						$(".scott").animateSprite('fps', 10)
+						$(".scott").animateSprite('fps', 13)
 						var endLoop = setInterval(function(){
 						
-						var x_dif = 55/3;
-						var y_dif = 55/3;
+						var x_dif = 47/3;
+						var y_dif = 37/3;
 						
 						if (direction == 1){
 						   //alert("Up")

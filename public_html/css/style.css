@@ -55,16 +55,16 @@ ol.odd {
   z-index:1;
   position: relative;
   background-color: #FFFFFF;
-  height: 43px;
+  height: 33px;
   width: 43px;
-  margin: 6px;
+  margin: 2px;
   float: left;
   -webkit-transition: all 150ms ease-in-out;
           transition: all 150ms ease-in-out;
   border-radius:5px;}
 
 .platform{
-          height: 41px;
+          height: 31px;
           width: 41px;
           border-style: solid;
           border-color:#D9D9D9;
@@ -74,13 +74,17 @@ ol.odd {
 .platform_exit {
   background-color: white !important; }
 
-.platform:hover, .blocked {
-  background: #F58787; }
+.platform:hover{
+  z-index:1;
+  background: #CDD6E5; }
 
+.blocked {
+  background: #546D9C; }
+  
 .container {
   position: relative;
-  width: 660px;
-  height: 660px;
+  width: 564px;
+  height: 348px;
   margin: auto;
   background-color: #FFFFFF;}
 
