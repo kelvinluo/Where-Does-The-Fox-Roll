@@ -1,22 +1,91 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>MEOW~!</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <style type="text/css">
+<head>
+<title>MEOW~!</title>
+<meta charset="UTF-8">
+<meta name="viewport" content=
+"width=device-width, initial-scale=1.0">
+<script src=
+"http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+type="text/javascript">
+</script>
+<script type="text/javascript" src="jquery.spritely.js">
+</script>
+<script type="text/javascript" src="jquery.animateSprite.js">
+</script>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<style type="text/css">
             .exit {
-                background-color:white !important;
-                cursor: default !important;
+                background-color:grey !important;
+                
+        opacity: 0.0;
             }
-        </style>
-        <script>
+      .container {
+        width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    display: none;
+        }
+       #fox{
+         z-index:100;
+       position:absolute;
+     display: none;
+        }
+        .active {
+            z-index:2;
+            background-color: #FFFFFF !important; }
+      .scott {
+         pointer-events:none;
+         animation-timing-function:
+         z-index:100;
+         height: 43px;
+         width: 43px;
+         background-image: url(images/animation_total.png);
+         display: inline-block;2
+         }
+     body{ 
+     background-color: grey;
+           -webkit-transition: background-color 0.4s ease;
+    -moz-transition: background-color 0.4s ease;
+    -o-transition: background-color 0.4s ease;
+    transition: background-color 0.4s ease;
+     }
+</style>
+
+<script type="text/javascript">
             var newX, newY, intendedDirection; //global
             var even, odd = false;
+      var endding = false;
+      var win = false;
+      var currentX = 0, currentY = 0;
+      
+      $(function() {
+                $(".scott").animateSprite({
+                    fps: 15,
+          animations: {
+              front_statics:[30, 31, 32, 33, 34],
+            back_statics:[36, 37, 38, 39, 35],
+            right_side_statics:[40, 41, 42, 43, 44],
+            right_front_side_statics:[46, 47, 48, 49, 45],
+            left_side_statics:[50, 51, 52, 53, 54],
+            left_front_side_statics:[56, 57, 58, 59, 55],
+            front: [1, 2, 3, 4, 0],
+                back: [6, 7, 8, 9, 5],
+            right_side: [11, 12, 13, 14, 10],
+            right_front_side: [16, 17, 18, 19, 15],
+            left_side: [21, 22, 23, 24, 20],
+            left_front_side: [26, 27, 28, 29, 25]
+              },
+                    loop: true
+                })
+            }); 
+      
             $(document).ready(function() {
                 var arr = [];
+        $('body').fadeIn(3000);
+        $('#currentContainer').fadeIn(3000);
+        $('#fox').fadeIn(3000);
+            document.getElementsByTagName("body")[0].style.cursor = "url('images/mousePointer.cur'), auto";
                 for (var x = 0; x < 11; x++) { // generate the map
                     var classType = x % 2 == 0 ? "even" : "odd";
                     arr[x] = $('<ol>').addClass(classType).attr("id", x);
@@ -53,9 +122,61 @@
                     }
                 }
 
+        //////////////////////////////
+        
+        //Initial position
+        var fox_pos = $('.fox');
+        var screen_width = $(window).width();
+        
+        var fox_x = 0;
+
+        if (cat_y <= 5){
+            fox_x = screen_width/2 - (5 - cat_y)*42 - (5 - cat_y)*5 - 24;
+        }
+        else{
+            fox_x = screen_width/2 + (cat_y - 6)*42 + (cat_y - 6)*5 + 24;
+        }
+        var fox_y = (cat_x)*42 + (cat_x + 1)*5 + 3;
+    
+    if (cat_x % 2 == 0){
+          fox_x = fox_x + 24;
+    }
+
+        document.getElementById("fox").style.left = fox_x + "px";
+        document.getElementById("fox").style.top = fox_y + "px";
+        currentX = cat_x;
+        currentY = cat_y;
+        //////////////////////////////
+        
+        
+        
                 $(".hex").click(function() {
                     $(this).addClass("blocked");
                     findPath(cat_x, cat_y, intendedDirection);
+                 var color = "#FFFFFF";
+       var randInt = Math.floor(Math.random() * 6) + 1;
+       switch(randInt){
+               case 1:
+                  color = "#4973A7";
+                  break;
+               case 2:
+                  color = "#AD6643";
+                  break;
+               case 3:
+                  color = "#3BB545";
+                  break;
+               case 4:
+                  color = "#48A888";
+                  break;
+               case 5:
+                  color = "#AF6641";
+                  break;
+               case 6:
+                  color = "#61628F";
+                  break;
+       }
+       document.getElementById("currentContainer").style.backgroundColor=color;
+       document.body.style.backgroundColor=color;
                 });
             });
 
@@ -99,7 +220,8 @@
                         $("li#" + x + "-" + y).removeClass("active") // moved. Change preoccupied color to neutral
                         $("li#" + newX + "-" + newY).addClass("active"); // new position
                         if ($("li#" + newX + "-" + newY).hasClass("exit")) {
-                            alert("Uh-oh. The cat has escaped. YOU LOST!");
+                            
+              endding = true;
                         }
                         cat_x = newX;
                         cat_y = newY; // update new cat location
@@ -107,12 +229,303 @@
                         break;
                     }
                     else if (i >= 5) { // last loop and break didn't trigger so all paths failed.
-                        alert("YOU WON!!");
-						
+                    $('body').fadeOut(3000);
+        			$('#currentContainer').fadeOut(3000);
+        			$('#fox').fadeOut(3000);
+					$('#music').fadeOut(3000);
+					var myVar=setTimeout(function () {window.location.href = './circle.html';
+					}, 3000);
+            win = true;
                     }
                 }
+                //////////////////////////////
+        var moveDirection = 0;
+              
+            if (x % 2 != 0){
+                  //Animation
+              if (y > newY){
+                     moveDirection = 1;
+                if (x < newX){
+                        moveDirection = 5;
+                      }
+                  else if (x > newX){
+                        moveDirection = 3;
+                    }
+                }
+                 else if (y < newY){
+                    moveDirection = 2;
+                  
+                }
+               else if (x < newX){
+                moveDirection = 4;
+            }
+               else if (x > newX){
+                     moveDirection = 6;
+            }
+             }
+            else{
+                //Animation
+              if (y > newY){
+                  moveDirection = 1;
+                }
+                 else if (y < newY){
+                        moveDirection = 2;
+                  if (x < newX){
+                        moveDirection = 4;
+                      }
+                  else if (x > newX){
+                        moveDirection = 6;
+                    }
+                }
+              else if (x < newX){
+                   moveDirection = 5;
+                }
+              else if (x > newX){
+                     moveDirection = 3;
+              }
+            }
+        //////////////////////////////////
+        /////////////////////////////////
+        //Position Changing #Block 43X43px, margin 6px
+        
+        if (endding){
+             endFox(moveDirection, x, y);
+        }
+        else if (!win){
+           moveFox(moveDirection, x, y);
+        }
+        
             }
 
+      
+      
+      function moveFox (direction, x, y){
+              var fox_pos = $('.fox');
+            var screen_width = $(window).width();
+            var screen_height = $(window).height();
+        var fox_x = 0;
+
+        //Initial position
+        var fox_pos = $('.fox');
+        var screen_width = $(window).width();
+        
+        var fox_x = 0;
+
+        if (y <= 5){
+            fox_x = screen_width/2 - (5 - y)*42 - (5 - y)*5 - 24;
+        }
+        else{
+            fox_x = screen_width/2 + (y - 6)*42 + (y - 6)*5 + 24;
+        }
+        var fox_y = (x)*42 + (x + 1)*5 + 3;
+    
+    if (x % 2 == 0){
+          fox_x = fox_x + 24;
+    }
+      var x_dif = 48/3;
+            if (direction != 1 && direction != 2){
+        x_dif = 24/3
+      }
+            
+            var y_dif = 35/3;
+            
+            if (direction == 1){
+                 //alert("Left")
+               $(".scott").animateSprite('play', 'left_side')
+               x_dif = -x_dif;
+               y_dif = 0;
+            }
+            else if (direction == 2){
+               //alert("Right")
+               $(".scott").animateSprite('play', 'right_side')
+               y_dif = 0;
+            }
+            else if (direction == 3){
+               y_dif = -y_dif;
+               x_dif = -x_dif;
+               $(".scott").animateSprite('play', 'left_side')
+            }
+            else if (direction == 4){
+               y_dif = y_dif;
+               x_dif = x_dif;
+               $(".scott").animateSprite('play', 'right_front_side')
+            }
+            else if (direction == 5){
+               y_dif = y_dif;
+               x_dif = -x_dif;
+               $(".scott").animateSprite('play', 'left_front_side')
+            }
+            else if (direction == 6){
+               y_dif = -y_dif;
+               x_dif = x_dif;
+               $(".scott").animateSprite('play', 'right_side')
+            }
+            fox_y += y_dif;
+            fox_x += x_dif;
+            
+            var myVar=setTimeout(function () {myTimer1()}, 100);
+               function myTimer1() {
+                              document.getElementById("fox").style.top = fox_y + "px";
+                      document.getElementById("fox").style.left = fox_x + "px";
+                      fox_y += y_dif;
+                      fox_x += x_dif;
+                      var myVar2=setTimeout(function () {myTimer2()}, 100);
+                   }
+            
+            
+            function myTimer2() {
+                           
+                                   document.getElementById("fox").style.top = fox_y + "px";
+                           document.getElementById("fox").style.left = fox_x + "px";
+                         fox_y += y_dif;
+                           fox_x += x_dif;
+                         var myVar3=setTimeout(function () {myTimer3()}, 100);
+                      }
+            
+            
+               function myTimer3() {
+                              document.getElementById("fox").style.top = fox_y + "px";
+                      document.getElementById("fox").style.left = fox_x + "px";
+                      switch (direction){
+                      case 1:
+                           $(".scott").animateSprite('play', 'left_side_statics')
+                         break;
+                      case 2:
+                           $(".scott").animateSprite('play', 'right_side_statics')
+                         break;
+                      case 3:
+                           $(".scott").animateSprite('play', 'left_side_statics')
+                         break;
+                      case 4:
+                           $(".scott").animateSprite('play', 'right_side_statics')
+                         break;
+                      case 5:
+                           $(".scott").animateSprite('play', 'left_front_side_statics')
+                         break;
+                      case 6:
+                           $(".scott").animateSprite('play', 'right_front_side_statics')
+                         break;
+                      }
+            }
+            currentX = x;
+            currentY = y;
+      }
+      
+      function endFox (direction, x, y){
+            var fox_pos = $('.fox');
+            var screen_width = $(window).width();
+            var screen_height = $(window).height();
+                var fox_x = 0;
+
+        //Initial position
+        var fox_pos = $('.fox');
+        var screen_width = $(window).width();
+        
+        var fox_x = 0;
+
+        if (y <= 5){
+            fox_x = screen_width/2 - (5 - y)*42 - (5 - y)*5 - 24;
+        }
+        else{
+            fox_x = screen_width/2 + (y - 6)*42 + (y - 6)*5 + 24;
+        }
+        var fox_y = (x)*42 + (x + 1)*5 + 3;
+    
+    if (x % 2 == 0){
+          fox_x = fox_x + 24;
+    }
+      var x_dif = 48/3;
+            if (direction != 1 && direction != 2){
+        x_dif = 24/3
+      }
+            
+            var y_dif = 35/3;
+            
+           
+            
+            
+            
+            var end = false;
+            $(".scott").animateSprite('fps', 13)
+            var endLoop = setInterval(function(){
+            
+            var x_dif = 48/3;
+            if (direction != 1 && direction != 2){
+        x_dif = 24/3
+      }
+            
+            var y_dif = 35/3;
+            
+            if (direction == 1){
+                 //alert("Left")
+               $(".scott").animateSprite('play', 'left_side')
+               x_dif = -x_dif;
+               y_dif = 0;
+            }
+            else if (direction == 2){
+               //alert("Right")
+               $(".scott").animateSprite('play', 'right_side')
+               y_dif = 0;
+            }
+            else if (direction == 3){
+               y_dif = -y_dif;
+               x_dif = -x_dif;
+               $(".scott").animateSprite('play', 'left_side')
+            }
+            else if (direction == 4){
+               y_dif = y_dif;
+               x_dif = x_dif;
+               $(".scott").animateSprite('play', 'right_side')
+            }
+            else if (direction == 5){
+               y_dif = y_dif;
+               x_dif = -x_dif;
+               $(".scott").animateSprite('play', 'left_front_side')
+            }
+            else if (direction == 6){
+               y_dif = -y_dif;
+               x_dif = x_dif;
+               $(".scott").animateSprite('play', 'right_front_side')
+            }
+            fox_y += y_dif;
+            fox_x += x_dif;
+            
+            var myVar=setTimeout(function () {myTimer1()}, 100);
+               function myTimer1() {
+                              document.getElementById("fox").style.top = fox_y + "px";
+                      document.getElementById("fox").style.left = fox_x + "px";
+                      fox_y += y_dif;
+                      fox_x += x_dif;
+                      var myVar2=setTimeout(function () {myTimer2()}, 100);
+                   }
+            
+            
+            function myTimer2() {
+                           
+                                   document.getElementById("fox").style.top = fox_y + "px";
+                           document.getElementById("fox").style.left = fox_x + "px";
+                         fox_y += y_dif;
+                           fox_x += x_dif;
+                         var myVar3=setTimeout(function () {myTimer3()}, 100);
+                      }
+            
+            
+               function myTimer3() {
+                              document.getElementById("fox").style.top = fox_y + "px";
+                      document.getElementById("fox").style.left = fox_x + "px";
+            }
+			if (fox_y < 0 || fox_y > screen_height || fox_x < 0 || fox_y < screen_width){
+					$('body').fadeOut(3000);
+        			$('#currentContainer').fadeOut(3000);
+        			$('#fox').fadeOut(3000);
+					$('#music').fadeOut(3000);
+					var myVar=setTimeout(function () {window.location.href = './index.html';
+					}, 3000);}
+			}, 320);
+      }
+      
+      
+      
             //NOTE: positioned in way that opposite directions are placed furthest apart
             function direction1(x, y) {
                 if (!$("li#" + x + "-" + (y - 1)).hasClass("blocked")) { // left
@@ -186,9 +599,10 @@
                 return Math.floor((Math.random() * 3) + 4);
             }
 
-        </script>
-    </head>
-    <body>
-        <div class="container"></div>
-    </body>
+</script>
+</head>
+<body>
+<div class="scott" id="fox"></div>
+<div class="container" id="currentContainer"></div>
+</body>
 </html>
