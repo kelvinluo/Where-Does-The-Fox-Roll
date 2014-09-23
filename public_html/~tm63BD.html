@@ -3,11 +3,10 @@
 <head>
 <title>MEOW~!</title>
 <meta charset="UTF-8">
-<meta name="viewport" content=
+<meta name="viewportx`" content=
 "width=device-width, initial-scale=1.0">
-<script src=
-"http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-type="text/javascript">
+<script type="text/javascript" src=
+"http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
 </script>
 <script type="text/javascript" src="jquery.spritely.js">
 </script>
@@ -15,9 +14,6 @@ type="text/javascript">
 </script>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <style type="text/css">
-            .platform{
-                border-radius:50%;
-            }
     .scott {
          pointer-events:none;
          animation-timing-function:
@@ -30,18 +26,19 @@ type="text/javascript">
     #fox{
          z-index:100;
        position:absolute;
-       display: none;
+     display: none;
         }
-    body{
+     body{
         background-color: grey;
-        -webkit-transition: background-color 0.4s ease;
-                -moz-transition: background-color 0.4s ease;
-              -o-transition: background-color 0.4s ease;
-              transition: background-color 0.4s ease;
-     }
-      .container{
-      			 background-color: grey;
-   					   display: none;
+      -webkit-transition: background-color 0.4s ease;
+    -moz-transition: background-color 0.4s ease;
+    -o-transition: background-color 0.4s ease;
+    transition: background-color 0.4s ease;
+  
+         }
+    .container{
+    background-color: grey;
+    display: none;
           }
 	#music{
 		   display:none;
@@ -54,9 +51,9 @@ type="text/javascript">
 <script type="text/javascript">
             var newX, newY, intendedDirection; //global
       var endding = false;
-      var currentX = 0, currentY = 0;
       var win = false;
-      
+      var currentX = 0, currentY = 0;
+	  var musicOn = true;
       $(function() {
                 $(".scott").animateSprite({
                     fps: 15,
@@ -78,14 +75,28 @@ type="text/javascript">
                 })
             }); 
       
+      
             $(document).ready(function() {
-                var arr = [];
-				document.getElementById("music").style.left= $(window).width()/2 - 10 + "px";
+			document.getElementById("music").style.left= $(window).width()/2 - 10 + "px";
         $('body').fadeIn(3000);
         $('#currentContainer').fadeIn(3000);
         $('#fox').fadeIn(3000);
 		$('#music').fadeIn(3000);
-        document.getElementsByTagName("body")[0].style.cursor = "url('images/mousePointer.cur'), auto";
+
+		$('#music').click(function() {
+			
+			if (musicOn == true){
+			$('#music1').trigger('pause');
+			   musicOn = false;
+			}
+			else{
+				 musicOn = true;
+				 $('#music1').trigger('play');
+			}
+        });
+		
+                var arr = [];
+            document.getElementsByTagName("body")[0].style.cursor = "url('images/mousePointer.cur'), auto";
                 for (var x = 0; x < 12; x++) { // generate the map
                     arr[x] = [];
                     for (var y = 0; y < 12; y++) {
@@ -98,12 +109,12 @@ type="text/javascript">
                         arr[x][y].appendTo('div.container');
                     }
                 }
-//                    setTimeout(function() {
+//                    setTimeout(function() {       
 //                     $('<div class="platform"/>').appendTo('div.container');
 //                    }, 25*i);
                 cat_x = getRandInt(); // called only once on load
                 cat_y = getRandInt();
-                intendedDirection = Math.floor((Math.random() * 7) + 1); // randomly selects a direction to start 1-8 (NOTE: can make 1-4 so starts easier)
+                intendedDirection = Math.floor((Math.random() * 4) + 1); // randomly selects a direction to start 1-4
                 $("div#" + cat_x + "-" + cat_y).addClass("active");
                 for (var z = 0; z < 8; z++) { // generate z initial blocks
                     var randX = Math.floor((Math.random() * 10) + 1);
@@ -115,9 +126,11 @@ type="text/javascript">
                         $("div#" + randX + "-" + randY).addClass("blocked");
                     }
                 }
-        ///////////////////////////////////
+        //////////////////////////////
         
-                        //Initial position
+
+        
+        //Initial position
         var fox_pos = $('.fox');
         var screen_width = $(window).width();
         
@@ -134,12 +147,14 @@ type="text/javascript">
         document.getElementById("fox").style.top = fox_y + "px";
         currentX = cat_x;
         currentY = cat_y;
+        //////////////////////////////
         
-        //////////////////
-                $(".platform").click(function() {
-                    $(this).addClass("blocked");
-                    findPath(cat_x, cat_y, intendedDirection);
-                 var color = "#FFFFFF";
+        
+        $(".platform").click(function() {
+          if (!endding){
+             $(this).addClass("blocked");
+             findPath(cat_x, cat_y, intendedDirection);
+       var color = "#FFFFFF";
        var randInt = Math.floor(Math.random() * 6) + 1;
        switch(randInt){
                case 1:
@@ -163,87 +178,78 @@ type="text/javascript">
        }
        document.getElementById("currentContainer").style.backgroundColor=color;
        document.body.style.backgroundColor=color;
+          }
+                    
                 });
+        $(window).resize(function(){
+        
+        var fox_x = 0;
+        if (y <= 5){
+              fox_x = screen_width/2 - (6 - currentY)*43 - (5 - currentY)*4;
+        }
+        else{
+            fox_x = screen_width/2 + (currentY - 6)*43 + (currentY - 6)*4;
+        }
+        var fox_y = (currentX)*33 + (currentX + 1)*4 - 5;
+        document.getElementById("fox").style.left = fox_x + "px";
+        document.getElementById("fox").style.top = fox_y + "px";
+        });
             });
+      
+      
+      
             function findPath(x, y, direction) { //NOTE: x is up/down. y is left/right. x-1 is up 1. y-1 is left 1      
                 var pathFinding;
-                var randSide = Math.floor((Math.random() * 2) + 1);
+                var randSide = Math.floor((Math.random() * 2) + 1);    
                 switch (direction) {
                     case 1:
-                        randSide == 1 ? pathFinding = [1, 5, 7, 2, 4, 6, 8, 3] : pathFinding = [1, 7, 5, 2, 4, 6, 8, 3];                       
+                        randSide == 1 ? pathFinding = [1, 2, 4, 3] : pathFinding = [1, 4, 2, 3];
                         break;
                     case 2:
-                        randSide == 1 ? pathFinding = [2, 7, 8, 1, 3, 5, 6, 4] : pathFinding = [2, 8, 7, 1, 3, 5, 6, 4];
+                        randSide == 1 ? pathFinding = [2, 1, 3, 4] : pathFinding = [2, 3, 1, 4];
                         break;
                     case 3:
-                        randSide == 1 ? pathFinding = [3, 6, 8, 2, 4, 5, 7, 1] : pathFinding = [3, 8, 6, 2, 4, 5, 7, 1];
+                        randSide == 1 ? pathFinding = [3, 2, 4, 1] : pathFinding = [3, 4, 2, 1];
                         break;
                     case 4:
-                        randSide == 1 ? pathFinding = [4, 5, 6, 3, 1, 7, 8, 2] : pathFinding = [4, 6, 5, 3, 1, 7, 8, 2];
-                        break;
-                    case 5:
-                        randSide == 1 ? pathFinding = [5, 4, 1, 6, 7, 3, 2, 8] : pathFinding = [5, 1, 4, 6, 7, 3, 2, 8];
-                        break;
-                    case 6:
-                        randSide == 1 ? pathFinding = [6, 4, 3, 8, 5, 1, 2, 7] : pathFinding = [6, 3, 4, 8, 5, 1, 2, 7];
-                        break;
-                    case 7:
-                        randSide == 1 ? pathFinding = [7, 1, 2, 5, 8, 4, 3, 6] : pathFinding = [7, 2, 1, 5, 8, 4, 3, 6];
-                        break;
-                    case 8:  
-                        randSide == 1 ? pathFinding = [8, 2, 3, 6, 7, 4, 1, 5] : pathFinding = [8, 3, 2, 6, 7, 4, 1, 5];
+                        randSide == 1 ? pathFinding = [4, 3, 1, 2] : pathFinding = [4, 1, 3, 2];
                         break;
                 }
-                for (i = 0; i < 8; i++) {
+        
+                for (i = 0; i < 4; i++) {
                     if (window["direction".concat(pathFinding[i])](x, y)) {
                         $("div#" + x + "-" + y).removeClass("active") // moved. Change preoccupied color to neutral
                         $("div#" + newX + "-" + newY).addClass("active"); // new position
                         if ($("div#" + newX + "-" + newY).hasClass("platform_exit")) {
-                            $('body').fadeOut(3000);
-        			$('#currentContainer').fadeOut(3000);
-        			$('#fox').fadeOut(3000);
-					$('#music').fadeOut(3000);
-					var myVar=setTimeout(function () {window.location.href = './index.html';
-					}, 3000);
-              				endding = true;
+                endding = true;
+                            
                         }
-                        cat_x = newX;
-                        cat_y = newY; // update new cat location
+
+            cat_x = newX;
+            cat_y = newY;
+            
                         intendedDirection = pathFinding[i]; // gets intended direction
                         break;
                     }
-                    else if (i >= 7) { // last loop and break didn't trigger so all paths failed.
+                    else if (i >= 3) { // last loop and break didn't trigger so all paths failed.
                         $('body').fadeOut(3000);
         			$('#currentContainer').fadeOut(3000);
         			$('#fox').fadeOut(3000);
 					$('#music').fadeOut(3000);
-					var myVar=setTimeout(function () {window.location.href = './index.html';
+					var myVar=setTimeout(function () {window.location.href = './hex.html';
 					}, 3000);
             win = true;
                     }
                 }
-
-        //////////////////////////////
+        
         var moveDirection = 0;
         
             //Animation
             if (x > newX){
                moveDirection = 1;
-               if (y > newY){
-                    moveDirection = 5;
-               }
-               else if (y < newY){
-                  moveDirection = 6;
-               }
             }
             else if (x < newX){
                moveDirection = 2;
-               if (y > newY){
-                    moveDirection = 7;
-               }
-               else if (y < newY){
-                  moveDirection = 8;
-               }
             }
             else if (y > newY){
                moveDirection = 3;
@@ -262,8 +268,7 @@ type="text/javascript">
            moveFox(moveDirection, x, y);
         }
             }
-
-              //////////////////////////////////
+        //////////////////////////////////
         /////////////////////////////////
             //NOTE: positioned in way that opposite directions are placed furthest apart
       
@@ -305,26 +310,6 @@ type="text/javascript">
                $(".scott").animateSprite('play', 'right_side')
                y_dif = 0;
             }
-            else if (direction == 5){
-               y_dif = -y_dif;
-               x_dif = -x_dif;
-               $(".scott").animateSprite('play', 'left_side')
-            }
-            else if (direction == 6){
-               y_dif = -y_dif;
-               x_dif = x_dif;
-               $(".scott").animateSprite('play', 'right_side')
-            }
-            else if (direction == 7){
-               y_dif = y_dif;
-               x_dif = -x_dif;
-               $(".scott").animateSprite('play', 'left_front_side')
-            }
-            else if (direction == 8){
-               y_dif = y_dif;
-               x_dif = x_dif;
-               $(".scott").animateSprite('play', 'right_front_side')
-            }
             fox_y += y_dif;
             fox_x += x_dif;
             
@@ -363,18 +348,6 @@ type="text/javascript">
                          break;
                       case 4:
                            $(".scott").animateSprite('play', 'right_side_statics')
-                         break;
-                      case 5:
-                           $(".scott").animateSprite('play', 'left_side_statics')
-                         break;
-                      case 6:
-                           $(".scott").animateSprite('play', 'right_side_statics')
-                         break;
-                      case 7:
-                           $(".scott").animateSprite('play', 'left_front_side_statics')
-                         break;
-                      case 8:
-                           $(".scott").animateSprite('play', 'right_front_side_statics')
                          break;
                       }
             }
@@ -426,26 +399,6 @@ type="text/javascript">
                $(".scott").animateSprite('play', 'right_side')
                y_dif = 0;
             }
-            else if (direction == 5){
-               y_dif = -y_dif;
-               x_dif = -x_dif;
-               $(".scott").animateSprite('play', 'left_side')
-            }
-            else if (direction == 6){
-               y_dif = -y_dif;
-               x_dif = x_dif;
-               $(".scott").animateSprite('play', 'right_side')
-            }
-            else if (direction == 7){
-               y_dif = y_dif;
-               x_dif = -x_dif;
-               $(".scott").animateSprite('play', 'left_front_side')
-            }
-            else if (direction == 8){
-               y_dif = y_dif;
-               x_dif = x_dif;
-               $(".scott").animateSprite('play', 'right_front_side')
-            }
             fox_y += y_dif;
             fox_x += x_dif;
             
@@ -472,23 +425,17 @@ type="text/javascript">
                function myTimer3() {
                               document.getElementById("fox").style.top = fox_y + "px";
                       document.getElementById("fox").style.left = fox_x + "px";
-			  
             }
-			  	    if (fox_y < 0 || fox_y > screen_height || fox_x < 0 || fox_y < screen_width){
+			if (fox_y < 0 || fox_y > screen_height || fox_x < 0 || fox_y < screen_width){
 					$('body').fadeOut(3000);
         			$('#currentContainer').fadeOut(3000);
         			$('#fox').fadeOut(3000);
 					$('#music').fadeOut(3000);
 					var myVar=setTimeout(function () {window.location.href = './index.html';
-					}, 3000);
-					   
-					}
+					}, 3000);}
 			}, 320);
       }
       
-      
-      
-            //NOTE: positioned in way that opposite directions are placed furthest apart
             function direction1(x, y) {
                 if (!$("div#" + x + "-" + (y - 1)).hasClass("blocked")) { // left
                     newX = x;
@@ -497,6 +444,7 @@ type="text/javascript">
                 }
                 return false;
             }
+      
             function direction2(x, y) {
                 if (!$("div#" + (x + 1) + "-" + y).hasClass("blocked")) { // down
                     newX = x + 1;
@@ -521,38 +469,6 @@ type="text/javascript">
                 }
                 return false;
             }
-            function direction5(x, y) {
-                if (!$("div#" + (x - 1) + "-" + (y - 1)).hasClass("blocked")) { // top-left
-                    newX = x - 1;
-                    newY = y - 1;
-                    return true;
-                }
-                return false;
-            }
-            function direction6(x, y) {
-                if (!$("div#" + (x - 1) + "-" + (y + 1)).hasClass("blocked")) { // top-right
-                    newX = x - 1;
-                    newY = y + 1;
-                    return true;
-                }
-                return false;
-            }
-            function direction7(x, y) {
-                if (!$("div#" + (x + 1) + "-" + (y - 1)).hasClass("blocked")) { // bottom-left
-                    newX = x + 1;
-                    newY = y - 1;
-                    return true;
-                }
-                return false;
-            }
-            function direction8(x, y) {
-                if (!$("div#" + (x + 1) + "-" + (y + 1)).hasClass("blocked")) { // bottom-right
-                    newX = x + 1;
-                    newY = y + 1;
-                    return true;
-                }
-                return false;
-            }
 
             function getRandInt() { // returns random # 4-5
                 return Math.floor((Math.random() * 5) + 4);
@@ -560,9 +476,13 @@ type="text/javascript">
 
 </script>
 </head>
-<body>
-<div class="scott" id="fox"></div>
-<div class="container" id="currentContainer"></div>
-<img id ="music" src="images/music.png" style="width:20px;height:20px">
+<body ccID="17483">
+
+<div ccID="17493" class="scott" id="fox"></div>
+<div ccID="17529" class="container" id="currentContainer"></div>
+
+<audio ccID="17584" id="music1" src="music_2.mp3" loop="true" autoplay="autoplay"></audio>
+
+<img ccID="17665" id ="music" src="images/music.png" style="width:20px;height:20px">
 </body>
 </html>
