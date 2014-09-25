@@ -56,7 +56,7 @@ type="text/javascript">
       var endding = false;
       var currentX = 0, currentY = 0;
       var win = false;
-      
+      var musicOn = true;
       $(function() {
                 $(".scott").animateSprite({
                     fps: 15,
@@ -85,6 +85,19 @@ type="text/javascript">
         $('#currentContainer').fadeIn(3000);
         $('#fox').fadeIn(3000);
 		$('#music').fadeIn(3000);
+		
+		$('#music').click(function() {
+			
+			if (musicOn == true){
+			$('#music1').trigger('pause');
+			   musicOn = false;
+			}
+			else{
+				 musicOn = true;
+				 $('#music1').trigger('play');
+			}
+        });
+		
         document.getElementsByTagName("body")[0].style.cursor = "url('images/mousePointer.cur'), auto";
                 for (var x = 0; x < 12; x++) { // generate the map
                     arr[x] = [];
@@ -564,5 +577,6 @@ type="text/javascript">
 <div class="scott" id="fox"></div>
 <div class="container" id="currentContainer"></div>
 <img id ="music" src="images/music.png" style="width:20px;height:20px">
+<audio id="music1" src="music_2.mp3" loop="true" autoplay="autoplay"></audio>
 </body>
 </html>
