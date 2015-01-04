@@ -60,6 +60,7 @@ ol.odd {
 
 .hex:hover {
   background: #F58787;
+  
   }
 
 .platform, .platform_exit {
@@ -77,7 +78,6 @@ ol.odd {
 .platform{
           height: 33px;
           width: 43px;
-
  }
   
 .platform_exit {
@@ -86,10 +86,11 @@ ol.odd {
 
 .platform:hover{
   z-index:1;
-  background: #D91E17; }
+  background: #D91E17;}
 
 .blocked {
-  background: #85120e; }
+  background: #85120e;
+  pointer-events: none;}
   
 .container {
   position: relative;
@@ -100,4 +101,5 @@ ol.odd {
 
 .active {
   z-index:2;
-  background-color: #FFFFFF !important; }
+  background-color: #FFFFFF !important;
+  pointer-events: none;}
