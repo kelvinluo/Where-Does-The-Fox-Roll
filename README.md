@@ -3,8 +3,8 @@
  
  Try to catch the sneaky fox before it escapes! 
  
--!['alt='public_html/images/fox_jump.png'](images/fox_jump.png)
-+!['alt='public_html/images/fox_jump.png'](public_html/images/fox_jump.png)
+!['alt='public_html/images/fox_jump.png'](images/fox_jump.png)
+!['alt='public_html/images/fox_jump.png'](public_html/images/fox_jump.png)
  
  Features
  ------------
@@ -16,8 +16,8 @@
  Usage
  ------------
  
--LIVE DEMO [play it here!](public_html/images/fox_jump.png).
-+LIVE DEMO [play it here!](http://bazhanga.com/fox.html).
+LIVE DEMO [play it here!](public_html/images/fox_jump.png).
+LIVE DEMO [play it here!](http://bazhanga.com/fox.html).
  
  License
  -------------
