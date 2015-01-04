@@ -3,7 +3,7 @@ Where Does The Fox Jump
 
 Try to catch the sneaky fox before it escapes! 
 
-!['alt='public_html/images/fox_jump.png'](public_html/images/fox_jump.png)
+!['alt='public_html/images/fox_jump.png'](public_html/fox_jump.png)
 
 Features
 ------------
